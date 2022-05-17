@@ -20,4 +20,16 @@ public class UserDTO {
 	private String name;
 	private String nickName;
 	private String password;
+	
+	public UserDTO() {
+		super();
+	}
+	
+	public UserDTO(Long id, String name, String nickName, String password) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.nickName = nickName;
+		this.password = password;
+	}			
 }

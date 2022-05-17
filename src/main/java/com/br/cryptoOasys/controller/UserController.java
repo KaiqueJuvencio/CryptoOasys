@@ -1,7 +1,12 @@
 package com.br.cryptoOasys.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,5 +26,11 @@ public class UserController {
 	public ResponseEntity<UserDTO> register(@RequestParam String name, @RequestParam String nickName, @RequestParam String password) {		
 		UserDTO user = userService.register(name, nickName, password);
 		return ResponseEntity.ok(user);
+	}
+	
+	@GetMapping("/login/{nickname}/{password}")
+	public Object login(HttpServletRequest request, HttpServletResponse response,
+						@PathVariable String nickname, @PathVariable String password) {
+		return userService.login(request, response, nickname, password);
 	}
 }
