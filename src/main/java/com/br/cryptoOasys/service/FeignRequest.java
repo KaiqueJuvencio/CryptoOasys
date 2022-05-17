@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.br.cryptoOasys.model.CoinDTO;
 
@@ -12,5 +13,7 @@ import com.br.cryptoOasys.model.CoinDTO;
 public interface FeignRequest {
 	@GetMapping(value = "coins", produces = "application/json")
 	public ResponseEntity<ArrayList<CoinDTO>> listCoins();
-//	public ResponseEntity<CoinDTO> listCoins(@PathVariable("youtubeChannelId") String youtubeChannelId);
+	
+	@GetMapping(value = "coins/{coinId}", produces = "application/json")
+	public ResponseEntity<CoinDTO> coinById(@PathVariable("coinId") String coinId);
 }

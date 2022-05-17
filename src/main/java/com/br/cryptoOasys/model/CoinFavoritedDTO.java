@@ -1,13 +1,45 @@
 package com.br.cryptoOasys.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.time.LocalDateTime;
 
-@EqualsAndHashCode(callSuper = false)
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Data;
+
+@Entity
+@Table(name="TB_COIN_FAVORITE")
 @Data
-public class CoinFavoritedDTO extends CoinDTO{
-	private String coinId;
-	private String notes;
-	private String created;
-	private String updates;
+public class CoinFavoritedDTO{
+	@Id
+	private String id;
+	private String name;
+	private String symbol;	
+	private String notes; 
+	private String userId;
+	private boolean favorite;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
+	private LocalDateTime created;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
+	private LocalDateTime updated;
+	
+	public CoinFavoritedDTO() {
+		super();
+	}
+
+	public CoinFavoritedDTO(String id, String name, String symbol, String notes, String userId, boolean favorite,
+			LocalDateTime created, LocalDateTime updated) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.symbol = symbol;
+		this.notes = notes;
+		this.userId = userId;
+		this.favorite = favorite;
+		this.created = created;
+		this.updated = updated;
+	}
 }
