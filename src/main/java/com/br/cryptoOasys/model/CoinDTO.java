@@ -10,13 +10,13 @@ public class CoinDTO{
 	private String name;
 	private String symbol;	
 	private boolean favorite;
-	private CoinFavoritedDTO coinFavorite;
+	private FavoriteCoinDTO coinFavorite;
 	
 	public CoinDTO() {
 		super();
 	}
 
-	public CoinDTO(String id, String name, String symbol, boolean favorite, CoinFavoritedDTO coinFavorite) {
+	public CoinDTO(String id, String name, String symbol, boolean favorite, FavoriteCoinDTO coinFavorite) {
 		super();
 		this.id = id;
 		this.name = name;

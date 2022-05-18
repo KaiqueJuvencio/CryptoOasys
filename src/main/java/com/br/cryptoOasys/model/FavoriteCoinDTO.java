@@ -13,7 +13,7 @@ import lombok.Data;
 @Entity
 @Table(name="TB_COIN_FAVORITE")
 @Data
-public class CoinFavoritedDTO{
+public class FavoriteCoinDTO{
 	@Id
 	private String id;
 	private String name;
@@ -25,11 +25,11 @@ public class CoinFavoritedDTO{
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
 	private LocalDateTime updated;
 	
-	public CoinFavoritedDTO() {
+	public FavoriteCoinDTO() {
 		super();
 	}
 
-	public CoinFavoritedDTO(String id, String name, String symbol, String notes, String userId,
+	public FavoriteCoinDTO(String id, String name, String symbol, String notes, String userId,
 			LocalDateTime created, LocalDateTime updated) {
 		super();
 		this.id = id;
