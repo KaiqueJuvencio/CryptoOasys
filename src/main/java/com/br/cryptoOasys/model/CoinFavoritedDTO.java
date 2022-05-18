@@ -20,7 +20,6 @@ public class CoinFavoritedDTO{
 	private String symbol;	
 	private String notes; 
 	private String userId;
-	private boolean favorite;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
 	private LocalDateTime created;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
@@ -30,15 +29,14 @@ public class CoinFavoritedDTO{
 		super();
 	}
 
-	public CoinFavoritedDTO(String id, String name, String symbol, String notes, String userId, boolean favorite,
+	public CoinFavoritedDTO(String id, String name, String symbol, String notes, String userId,
 			LocalDateTime created, LocalDateTime updated) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.symbol = symbol;
 		this.notes = notes;
-		this.userId = userId;
-		this.favorite = favorite;
+		this.userId = userId;		
 		this.created = created;
 		this.updated = updated;
 	}

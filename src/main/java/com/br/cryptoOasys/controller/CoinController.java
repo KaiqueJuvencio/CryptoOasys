@@ -1,6 +1,6 @@
 package com.br.cryptoOasys.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +25,13 @@ public class CoinController {
 	CoinService coinService;
 	
 	@GetMapping
-	public ResponseEntity<ArrayList<CoinDTO>> list() {		
-		return coinService.list();
+	public ResponseEntity<List<CoinDTO>> listCoins(HttpServletRequest request, HttpServletResponse response) {		
+		return coinService.list(request, response);
+	}
+	
+	@GetMapping("/favorites")
+	public List<CoinFavoritedDTO> listFavoriteCoins(HttpServletRequest request, HttpServletResponse response) {		
+		return coinService.findFavoritesByUserId(request, response);
 	}
 	
 	@PostMapping("/favoriting")
