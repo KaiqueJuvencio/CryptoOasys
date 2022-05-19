@@ -61,4 +61,10 @@ public class UserService {
 			throw new UserNotLoggedException("User not logged");
 		}															
 	}
+	
+	public String getLoggedUser(HttpServletRequest request) {
+		this.verifyIfUserIsLogged(request);
+		HttpSession session = request.getSession();
+		return session.getAttribute("userLogged").toString();
+	}
 }

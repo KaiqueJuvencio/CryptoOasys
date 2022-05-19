@@ -19,10 +19,10 @@ public class ResponseMessageVO {
 	private String status;			
 	
 	public static ResponseMessageVO OK(String message) {		
-		ResponseMessageVO n = new ResponseMessageVO();
-		n.setMessage(message);		
-		n.setStatus(HttpStatus.OK.toString());
-		n.setTime(LocalDateTime.now());
-		return n;
+		ResponseMessageVO response = new ResponseMessageVO();
+		response.setMessage(message);		
+		response.setStatus(HttpStatus.OK.toString());
+		response.setTime(LocalDateTime.now());
+		return response;
 	}	
 }

@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.br.cryptoOasys.model.CoinDTO;
+import com.br.cryptoOasys.model.CoinVO;
 
 @FeignClient(name = "coinpaprika", url = "https://api.coinpaprika.com/v1/")
 public interface FeignRequest {
 	@GetMapping(value = "coins", produces = "application/json")
-	public ResponseEntity<List<CoinDTO>> listCoins();
+	public ResponseEntity<List<CoinVO>> listCoins();
 	
 	@GetMapping(value = "coins/{coinId}", produces = "application/json")
-	public ResponseEntity<CoinDTO> coinById(@PathVariable("coinId") String coinId);
+	public ResponseEntity<CoinVO> coinById(@PathVariable("coinId") String coinId);
 }

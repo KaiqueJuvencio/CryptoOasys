@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.cryptoOasys.model.CoinDTO;
+import com.br.cryptoOasys.model.CoinVO;
 import com.br.cryptoOasys.service.CoinService;
 
 @RestController
@@ -22,7 +22,7 @@ public class CoinController {
 	CoinService coinService;
 	
 	@GetMapping
-	public ResponseEntity<List<CoinDTO>> list(HttpServletRequest request, HttpServletResponse response) {		
+	public ResponseEntity<List<CoinVO>> list(HttpServletRequest request, HttpServletResponse response) {		
 		return coinService.list(request, response);
 	}
 }

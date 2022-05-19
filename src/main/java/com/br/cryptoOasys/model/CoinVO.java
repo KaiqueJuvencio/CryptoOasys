@@ -5,18 +5,18 @@ import lombok.Data;
 
 @Builder
 @Data
-public class CoinDTO{	
+public class CoinVO{	
 	private String id;
 	private String name;
 	private String symbol;	
 	private boolean favorite;
 	private FavoriteCoinDTO coinFavorite;
 	
-	public CoinDTO() {
+	public CoinVO() {
 		super();
 	}
 
-	public CoinDTO(String id, String name, String symbol, boolean favorite, FavoriteCoinDTO coinFavorite) {
+	public CoinVO(String id, String name, String symbol, boolean favorite, FavoriteCoinDTO coinFavorite) {
 		super();
 		this.id = id;
 		this.name = name;

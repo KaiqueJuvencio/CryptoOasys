@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.br.cryptoOasys.exceptions.BadRequestException;
+import com.br.cryptoOasys.exceptions.FavoritesDontExistException;
 import com.br.cryptoOasys.exceptions.ResponseErrorMessage;
 import com.br.cryptoOasys.exceptions.UserNotLoggedException;
+import com.br.cryptoOasys.model.ResponseMessageVO;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
 	ResponseErrorMessage erro = new ResponseErrorMessage();
+	ResponseMessageVO messageVO = new ResponseMessageVO();
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<ResponseErrorMessage> handleBadRequestException(BadRequestException badRequestException,
@@ -37,5 +40,11 @@ public class ApiExceptionHandler {
 		erro.setTimestamp(Instant.now());
 		erro.setMessage(accountNotFoundException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(FavoritesDontExistException.class)
+	public ResponseEntity<ResponseMessageVO> handleAccountNotFoundException(FavoritesDontExistException accountNotFoundException,
+			HttpServletRequest request) {
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseMessageVO.OK("There are no favorite coins"));
 	}
 }
