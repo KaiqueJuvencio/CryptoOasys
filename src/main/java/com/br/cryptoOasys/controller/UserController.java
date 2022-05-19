@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.cryptoOasys.model.ResponseMessageVO;
 import com.br.cryptoOasys.model.UserDTO;
 import com.br.cryptoOasys.service.UserService;
 
@@ -23,15 +24,22 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<UserDTO> register(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<ResponseMessageVO> register(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String name, @RequestParam String nickName, @RequestParam String password) {		
-		UserDTO user = userService.register(request, name, nickName, password);
-		return ResponseEntity.ok(user);
+		UserDTO userCreated = userService.register(request, name, nickName, password);
+		return ResponseEntity.ok(ResponseMessageVO.OK(userCreated.getName() + " successfully created"));
 	}
 	
 	@GetMapping("/login/{nickname}/{password}")
 	public Object login(HttpServletRequest request, HttpServletResponse response,
 						@PathVariable String nickname, @PathVariable String password) {
-		return userService.login(request, response, nickname, password);
+		String userLogged = userService.login(request, response, nickname, password);
+		return ResponseEntity.ok(ResponseMessageVO.OK(userLogged + " successfully logged"));
+	}
+	
+	@GetMapping("/logout")
+	public Object logout(HttpServletRequest request, HttpServletResponse response) {
+		userService.logout(request, response);
+		return ResponseEntity.ok(ResponseMessageVO.OK("Logout succesfull"));
 	}
 }

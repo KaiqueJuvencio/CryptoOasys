@@ -30,8 +30,8 @@ public class FavoriteCoinService {
 
 	public FavoriteCoinDTO favoriting(HttpServletRequest request, HttpServletResponse response, String coinId,
 			String notes) {
-		String errorMessage = "Error to favoriting coin. Make sure this coin exist";
 		userService.verifyIfUserIsLogged(request);
+		String errorMessage = "Error to favoriting coin. Make sure this coin exist";
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
 			CoinVO coin = feignRequest.coinById(coinId).getBody();
@@ -50,6 +50,7 @@ public class FavoriteCoinService {
 	}
 
 	public List<FavoriteCoinDTO> findFavoritesByUserId(HttpServletRequest request, HttpServletResponse response) {
+		userService.verifyIfUserIsLogged(request);
 		String errorMessage = "Error";
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
@@ -64,8 +65,8 @@ public class FavoriteCoinService {
 
 	public FavoriteCoinDTO update(HttpServletRequest request, HttpServletResponse response, String coinId,
 			String notes) {
-		String errorMessage = "Error";
 		userService.verifyIfUserIsLogged(request);
+		String errorMessage = "Error";
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);
@@ -81,8 +82,8 @@ public class FavoriteCoinService {
 
 	public FavoriteCoinDTO delete(HttpServletRequest request, HttpServletResponse response, String coinId)
 			throws FavoritesDontExistException {
-		String errorMessage = "Error";
 		userService.verifyIfUserIsLogged(request);
+		String errorMessage = "Error";
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);

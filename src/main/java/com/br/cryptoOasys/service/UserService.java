@@ -20,8 +20,7 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public UserDTO register(HttpServletRequest request, String name, String nickName, String password) {
-		this.verifyIfUserIsLogged(request);
+	public UserDTO register(HttpServletRequest request, String name, String nickName, String password) {		
 		String errorMsg= "Error to register user";
 		try {
 			Optional<UserDTO> userExistent = userRepository.findByNickName(nickName);
@@ -41,18 +40,27 @@ public class UserService {
 	}
 	
 	
-	public boolean login(HttpServletRequest request, HttpServletResponse response,
+	public String login(HttpServletRequest request, HttpServletResponse response,
 			String nickName, String password) {
 		Optional<UserDTO> user = userRepository.findByNickName(nickName);
 		HttpSession session = request.getSession();
 		if(user.isPresent()) {
-			if(user.get().getPassword().equals(password)) {
+			if(correctPassword(user, password)) {
 				session.setAttribute("userLogged", nickName);
-				return true;
+				return user.get().getName();
 			}
-			return false;
+			throw new BadRequestException("Incorrect password");
 		}
-		return false;		
+		throw new BadRequestException("User not exist");	
+	}
+	
+	public void logout(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			HttpSession session = request.getSession();
+			session.setAttribute("userLogged", null);	
+		}catch (Exception e) {
+			throw new BadRequestException("Error to logou");
+		}		
 	}
 	
 	public void verifyIfUserIsLogged(HttpServletRequest request)  {		
@@ -66,5 +74,9 @@ public class UserService {
 		this.verifyIfUserIsLogged(request);
 		HttpSession session = request.getSession();
 		return session.getAttribute("userLogged").toString();
+	}
+	
+	public boolean correctPassword(Optional<UserDTO> user, String password) {
+		return user.get().getPassword().equals(password) ? true : false;
 	}
 }

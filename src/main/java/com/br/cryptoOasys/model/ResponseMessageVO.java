@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ResponseMessageVO {
 	@JsonProperty(value = "message")
 	private String message;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd - HH:mm", timezone = "GMT")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", timezone = "GMT")
 	private LocalDateTime time;
 	@JsonProperty(value = "status")
 	private String status;			
