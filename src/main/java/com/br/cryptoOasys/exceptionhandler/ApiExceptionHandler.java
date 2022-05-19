@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.br.cryptoOasys.exceptions.BadRequestException;
 import com.br.cryptoOasys.exceptions.ResponseErrorMessage;
+import com.br.cryptoOasys.exceptions.UserNotLoggedException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -24,6 +25,17 @@ public class ApiExceptionHandler {
 		erro.setStatus(HttpStatus.BAD_REQUEST.value());
 		erro.setTimestamp(Instant.now());
 		erro.setMessage(badRequestException.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(UserNotLoggedException.class)
+	public ResponseEntity<ResponseErrorMessage> handleAccountNotFoundException(UserNotLoggedException accountNotFoundException,
+			HttpServletRequest request) {
+		erro.setError(HttpStatus.BAD_REQUEST);
+		erro.setPath(request.getRequestURI());
+		erro.setStatus(HttpStatus.BAD_REQUEST.value());
+		erro.setTimestamp(Instant.now());
+		erro.setMessage(accountNotFoundException.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 }

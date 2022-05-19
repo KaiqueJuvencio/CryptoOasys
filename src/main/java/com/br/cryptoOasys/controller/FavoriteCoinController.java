@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.cryptoOasys.exceptions.ResponseErrorMessage;
 import com.br.cryptoOasys.model.FavoriteCoinDTO;
+import com.br.cryptoOasys.model.ResponseSuccessMessageVO;
 import com.br.cryptoOasys.service.FavoriteCoinService;
 
 @RestController
@@ -36,9 +39,16 @@ public class FavoriteCoinController {
 		return favoriteCoinService.favoriting(request, response, coinId, notes);
 	}
 	
+	@PutMapping
+	public ResponseEntity<ResponseErrorMessage> update(HttpServletRequest request, HttpServletResponse response, 
+			@RequestParam String notes, @RequestParam String coinId) {
+		favoriteCoinService.update(request, response, coinId, notes);
+		return ResponseEntity.ok(ResponseSuccessMessageVO.OK(""));
+	}
+	
 	@DeleteMapping("/{coinId}")
 	public ResponseEntity<FavoriteCoinDTO> delete(HttpServletRequest request, HttpServletResponse response, 
 			@PathVariable String coinId) {		
 		return ResponseEntity.ok(favoriteCoinService.delete(request, response, coinId));
-	}
+	}	
 }
