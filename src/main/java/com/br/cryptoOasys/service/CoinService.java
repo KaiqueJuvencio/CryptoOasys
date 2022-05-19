@@ -25,8 +25,12 @@ public class CoinService {
 	
 	@Autowired
 	FavoriteCoinService favoriteCoinService;
+	
+	@Autowired
+	UserService userService;
 
-	public ResponseEntity<List<CoinDTO>> list(HttpServletRequest request, HttpServletResponse response) {	
+	public ResponseEntity<List<CoinDTO>> list(HttpServletRequest request, HttpServletResponse response) {
+		userService.verifyIfUserIsLogged(request);
 		try {
 			ResponseEntity<List<CoinDTO>> coins = feignRequest.listCoins();
 			List<FavoriteCoinDTO> coinsFavorited = favoriteCoinService.findFavoritesByUserId(request, response);

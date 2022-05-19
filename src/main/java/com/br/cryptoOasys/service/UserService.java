@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.br.cryptoOasys.exceptions.BadRequestException;
+import com.br.cryptoOasys.exceptions.UserNotLoggedException;
 import com.br.cryptoOasys.model.UserDTO;
 import com.br.cryptoOasys.repository.UserRepository;
 
@@ -19,7 +20,8 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public UserDTO register(String name, String nickName, String password) {		
+	public UserDTO register(HttpServletRequest request, String name, String nickName, String password) {
+		this.verifyIfUserIsLogged(request);
 		String errorMsg= "Error to register user";
 		try {
 			Optional<UserDTO> userExistent = userRepository.findByNickName(nickName);
@@ -51,5 +53,12 @@ public class UserService {
 			return false;
 		}
 		return false;		
+	}
+	
+	public void verifyIfUserIsLogged(HttpServletRequest request)  {		
+		HttpSession session = request.getSession();		
+		if(session.getAttribute("userLogged") == null) {
+			throw new UserNotLoggedException("User not logged");
+		}															
 	}
 }

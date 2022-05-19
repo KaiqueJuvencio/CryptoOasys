@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.br.cryptoOasys.exceptions.BadRequestException;
-import com.br.cryptoOasys.exceptions.UserNotLoggedException;
 import com.br.cryptoOasys.model.CoinDTO;
 import com.br.cryptoOasys.model.FavoriteCoinDTO;
 import com.br.cryptoOasys.repository.FavoriteCoinRepository;
@@ -25,6 +24,9 @@ public class FavoriteCoinService {
 
 	@Autowired
 	FavoriteCoinRepository coinFavoriteRepository;
+	
+	@Autowired
+	UserService userService;
 	
 	String errorMessage = "Error";
 
@@ -49,7 +51,7 @@ public class FavoriteCoinService {
 	}
 	
 	public FavoriteCoinDTO update(HttpServletRequest request, HttpServletResponse response, String coinId, String notes) {				
-		this.verifyIfUserIsLogged(request);
+		userService.verifyIfUserIsLogged(request);
 		try {
 			String userIdLogged = this.getLoggedUser(request);
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);
@@ -71,15 +73,8 @@ public class FavoriteCoinService {
 	}
 	
 	public String getLoggedUser(HttpServletRequest request) {
-		this.verifyIfUserIsLogged(request);
+		userService.verifyIfUserIsLogged(request);
 		HttpSession session = request.getSession();			
 		return session.getAttribute("userLogged").toString(); 
-	}
-	
-	public void verifyIfUserIsLogged(HttpServletRequest request)  {		
-		HttpSession session = request.getSession();		
-		if(session.getAttribute("userLogged") == null) {
-			throw new UserNotLoggedException("User not logged");
-		}															
-	}
+	}		
 }

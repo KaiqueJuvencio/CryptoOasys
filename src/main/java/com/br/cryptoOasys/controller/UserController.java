@@ -23,8 +23,9 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<UserDTO> register(@RequestParam String name, @RequestParam String nickName, @RequestParam String password) {		
-		UserDTO user = userService.register(name, nickName, password);
+	public ResponseEntity<UserDTO> register(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam String name, @RequestParam String nickName, @RequestParam String password) {		
+		UserDTO user = userService.register(request, name, nickName, password);
 		return ResponseEntity.ok(user);
 	}
 	

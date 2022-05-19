@@ -16,39 +16,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.cryptoOasys.exceptions.ResponseErrorMessage;
 import com.br.cryptoOasys.model.FavoriteCoinDTO;
-import com.br.cryptoOasys.model.ResponseSuccessMessageVO;
+import com.br.cryptoOasys.model.ResponseMessageVO;
 import com.br.cryptoOasys.service.FavoriteCoinService;
 
 @RestController
 @RequestMapping("/api/favorite-coin")
 public class FavoriteCoinController {
-	
+
 	@Autowired
 	FavoriteCoinService favoriteCoinService;
-	
+
 	@GetMapping
-	public List<FavoriteCoinDTO> list(HttpServletRequest request, HttpServletResponse response) {		
-		return favoriteCoinService.findFavoritesByUserId(request, response);
+	public ResponseEntity<List<FavoriteCoinDTO>> list(HttpServletRequest request, HttpServletResponse response) {
+		List<FavoriteCoinDTO> favoriteCoins = favoriteCoinService.findFavoritesByUserId(request, response);
+		return ResponseEntity.ok(favoriteCoins);
 	}
-	
+
 	@PostMapping
-	public FavoriteCoinDTO favoriting(HttpServletRequest request, HttpServletResponse response, 
-			@RequestParam String notes, @RequestParam String coinId) {		
-		return favoriteCoinService.favoriting(request, response, coinId, notes);
+	public ResponseEntity<ResponseMessageVO> favoriting(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam String notes, @RequestParam String coinId) {
+		favoriteCoinService.favoriting(request, response, coinId, notes);
+		return ResponseEntity.ok(ResponseMessageVO.OK("Successfully favorited"));
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<ResponseErrorMessage> update(HttpServletRequest request, HttpServletResponse response, 
+	public ResponseEntity<ResponseMessageVO> update(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam String notes, @RequestParam String coinId) {
 		favoriteCoinService.update(request, response, coinId, notes);
-		return ResponseEntity.ok(ResponseSuccessMessageVO.OK(""));
+		return ResponseEntity.ok(ResponseMessageVO.OK("Notes successfully updated"));
 	}
-	
+
 	@DeleteMapping("/{coinId}")
-	public ResponseEntity<FavoriteCoinDTO> delete(HttpServletRequest request, HttpServletResponse response, 
-			@PathVariable String coinId) {		
-		return ResponseEntity.ok(favoriteCoinService.delete(request, response, coinId));
-	}	
+	public ResponseEntity<ResponseMessageVO> delete(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable String coinId) {
+		favoriteCoinService.delete(request, response, coinId);
+		return ResponseEntity.ok(ResponseMessageVO.OK("Favorite coin successfully deleted"));
+	}
 }
