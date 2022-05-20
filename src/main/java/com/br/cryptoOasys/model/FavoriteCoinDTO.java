@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Data;
 
 @Entity
-@Table(name="TB_COIN_FAVORITE")
+@Table(name="TB_FAVORITE_COIN")
 @Data
 public class FavoriteCoinDTO{
 	@NotNull

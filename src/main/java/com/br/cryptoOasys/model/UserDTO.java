@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Entity
-@Table(name="USER_TABLE")
+@Table(name="TB_USER")
 @Data
 @Builder
 public class UserDTO {
