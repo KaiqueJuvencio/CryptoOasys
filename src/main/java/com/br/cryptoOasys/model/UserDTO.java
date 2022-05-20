@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,9 @@ public class UserDTO {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	@NotNull
 	private String nickName;
+	@NotNull
 	private String password;
 	
 	public UserDTO() {

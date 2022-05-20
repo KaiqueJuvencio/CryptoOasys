@@ -4,16 +4,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.br.cryptoOasys.model.FavoriteCoinDTO;
@@ -35,18 +37,19 @@ public class FavoriteCoinController {
 
 	@PostMapping
 	public ResponseEntity<ResponseMessageVO> favoriting(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam String notes, @RequestParam String coinId) {
-		favoriteCoinService.favoriting(request, response, coinId, notes);
+			@RequestBody @Valid FavoriteCoinDTO favoriteCoin) {
+		favoriteCoinService.favoriting(request, response, favoriteCoin.getId(), favoriteCoin.getNotes());
 		return ResponseEntity.ok(ResponseMessageVO.OK("Successfully favorited"));
 	}
-
+	
 	@PutMapping
 	public ResponseEntity<ResponseMessageVO> update(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam String notes, @RequestParam String coinId) {
-		favoriteCoinService.update(request, response, coinId, notes);
+			@RequestBody @Valid FavoriteCoinDTO favoriteCoin) {
+		favoriteCoinService.update(request, response, favoriteCoin.getId(), favoriteCoin.getNotes());
 		return ResponseEntity.ok(ResponseMessageVO.OK("Notes successfully updated"));
 	}
-
+	
+	@CachePut(value = "coin")
 	@DeleteMapping("/{coinId}")
 	public ResponseEntity<ResponseMessageVO> delete(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String coinId) {

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -14,11 +15,12 @@ import lombok.Data;
 @Table(name="TB_COIN_FAVORITE")
 @Data
 public class FavoriteCoinDTO{
+	@NotNull
 	@Id
 	private String id;
 	private String name;
-	private String symbol;	
-	private String notes; 
+	private String symbol;		
+	private String notes;	
 	private String userId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
 	private LocalDateTime created;
