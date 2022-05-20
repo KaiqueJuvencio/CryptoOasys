@@ -1,5 +1,8 @@
 package com.br.cryptoOasys.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,6 +13,7 @@ public class CoinVO{
 	private String name;
 	private String symbol;	
 	private boolean favorite;
+	@JsonInclude(Include.NON_NULL)
 	private FavoriteCoinDTO coinFavorite;
 	
 	public CoinVO() {

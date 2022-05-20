@@ -8,6 +8,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import lombok.Data;
 
@@ -19,8 +22,10 @@ public class FavoriteCoinDTO{
 	@Id
 	private String id;
 	private String name;
-	private String symbol;		
-	private String notes;	
+	private String symbol;
+	@JsonInclude(Include.NON_NULL)
+	private String notes;
+	@JsonIgnore
 	private String userId;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy - HH:mm", locale = "pt-BR", timezone = "Brazil/East")
 	private LocalDateTime created;
