@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.br.cryptoOasys.exceptions.BadRequestException;
 import com.br.cryptoOasys.exceptions.FavoritesDontExistException;
+import com.br.cryptoOasys.exceptions.ObjectNullException;
 import com.br.cryptoOasys.model.CoinVO;
 import com.br.cryptoOasys.model.FavoriteCoinDTO;
 import com.br.cryptoOasys.repository.FavoriteCoinRepository;
@@ -50,54 +51,58 @@ public class FavoriteCoinService {
 	}
 
 	public List<FavoriteCoinDTO> findFavoritesByUserId(HttpServletRequest request, HttpServletResponse response) {
-		userService.verifyIfUserIsLogged(request);
-		String errorMessage = "Error";
+		userService.verifyIfUserIsLogged(request);		
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
-			List<FavoriteCoinDTO> favoriteCoins = coinFavoriteRepository.findByUserId(userIdLogged);
-			errorMessage = favoriteCoins.isEmpty() ? "There are no favorite coins" : "Error to find favorite coins";
+			List<FavoriteCoinDTO> favoriteCoins = coinFavoriteRepository.findByUserId(userIdLogged);			
 			this.verifyFavoriteCoinsIsNull(favoriteCoins);
 			return favoriteCoins;
+		} catch (ObjectNullException  e) {
+			throw new ObjectNullException("There are no favorite coins");			
 		} catch (Exception e) {
-			throw new BadRequestException(errorMessage);
+			throw new BadRequestException("Error to find favorite coins");
 		}
 	}
 
 	public FavoriteCoinDTO update(HttpServletRequest request, HttpServletResponse response, String coinId,
 			String notes) {
-		userService.verifyIfUserIsLogged(request);
-		String errorMessage = "Error";
+		userService.verifyIfUserIsLogged(request);		
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);
-			errorMessage = favoriteCoin.isEmpty() ? "This coin is not a favorite" : "Error to update notes";
+			this.verifyFavoriteCoinsIsNull(favoriteCoin);
 			favoriteCoin.get().setNotes(notes);
 			favoriteCoin.get().setUpdated(LocalDateTime.now());
 			coinFavoriteRepository.save(favoriteCoin.get());
 			return favoriteCoin.get();
+		} catch (ObjectNullException  e) {
+			throw new ObjectNullException("This coin is not a favorite");			
 		} catch (Exception e) {
-			throw new BadRequestException(errorMessage);
+			throw new BadRequestException("Error to update notes");
 		}
 	}
 
 	public FavoriteCoinDTO delete(HttpServletRequest request, HttpServletResponse response, String coinId)
 			throws FavoritesDontExistException {
-		userService.verifyIfUserIsLogged(request);
-		String errorMessage = "Error";
+		userService.verifyIfUserIsLogged(request);		
 		try {
 			String userIdLogged = userService.getLoggedUser(request);
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);
-			errorMessage = favoriteCoin.isEmpty() ? "This coin not exist" : "Error to delete coin";
+			this.verifyFavoriteCoinsIsNull(favoriteCoin);
 			coinFavoriteRepository.delete(favoriteCoin.get());
 			return favoriteCoin.get();
+		} catch (ObjectNullException  e) {
+			throw new ObjectNullException("This coin not exist");			
 		} catch (Exception e) {
-			throw new BadRequestException(errorMessage);
+			throw new BadRequestException("Error to delete coin");
 		}
 	}	
 	
 	public void verifyFavoriteCoinsIsNull(List<FavoriteCoinDTO> favoriteCoins) {
-		if(favoriteCoins.isEmpty()) {			
-			throw new BadRequestException("");
-		}
+		if(favoriteCoins.isEmpty()) throw new ObjectNullException("");
+	}
+	
+	public void verifyFavoriteCoinsIsNull(Optional<FavoriteCoinDTO> favoriteCoins) {
+		if(favoriteCoins.isEmpty()) throw new ObjectNullException("");
 	}
 }

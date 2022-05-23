@@ -2,9 +2,9 @@ package com.br.cryptoOasys.model;
 
 import java.util.List;
 
-import com.br.cryptoOasys.exceptions.ResponseErrorMessage;
+import com.br.cryptoOasys.exceptions.ResponseMessage;
 
-public class ResponseErrorMessageNotValid extends ResponseErrorMessage{
+public class ResponseErrorMessageNotValid extends ResponseMessage{
 	
 	private List<FieldNotValid> fields;
 

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.br.cryptoOasys.exceptions.ResponseMessage;
 import com.br.cryptoOasys.model.FavoriteCoinDTO;
-import com.br.cryptoOasys.model.ResponseMessageVO;
 import com.br.cryptoOasys.service.FavoriteCoinService;
 
 @RestController
@@ -36,24 +36,24 @@ public class FavoriteCoinController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ResponseMessageVO> favoriting(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<ResponseMessage> favoriting(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody @Valid FavoriteCoinDTO favoriteCoin) {
 		favoriteCoinService.favoriting(request, response, favoriteCoin.getId(), favoriteCoin.getNotes());
-		return ResponseEntity.ok(ResponseMessageVO.OK("Successfully favorited"));
+		return ResponseEntity.ok(ResponseMessage.OK("Successfully favorited", request));
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseMessageVO> update(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<ResponseMessage> update(HttpServletRequest request, HttpServletResponse response,
 			@RequestBody @Valid FavoriteCoinDTO favoriteCoin) {
 		favoriteCoinService.update(request, response, favoriteCoin.getId(), favoriteCoin.getNotes());
-		return ResponseEntity.ok(ResponseMessageVO.OK("Notes successfully updated"));
+		return ResponseEntity.ok(ResponseMessage.OK("Notes successfully updated", request));
 	}
 	
 	@CachePut(value = "coin")
 	@DeleteMapping("/{coinId}")
-	public ResponseEntity<ResponseMessageVO> delete(HttpServletRequest request, HttpServletResponse response,
+	public ResponseEntity<ResponseMessage> delete(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String coinId) {
 		favoriteCoinService.delete(request, response, coinId);
-		return ResponseEntity.ok(ResponseMessageVO.OK("Favorite coin successfully deleted"));
+		return ResponseEntity.ok(ResponseMessage.OK("Favorite coin successfully deleted", request));
 	}
 }

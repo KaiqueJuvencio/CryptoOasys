@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.br.cryptoOasys.exceptions.BadRequestException;
 import com.br.cryptoOasys.exceptions.FavoritesDontExistException;
-import com.br.cryptoOasys.exceptions.ResponseErrorMessage;
+import com.br.cryptoOasys.exceptions.ObjectNullException;
+import com.br.cryptoOasys.exceptions.ResponseMessage;
 import com.br.cryptoOasys.exceptions.UserNotLoggedException;
 import com.br.cryptoOasys.model.FieldNotValid;
 import com.br.cryptoOasys.model.ResponseErrorMessageNotValid;
@@ -26,7 +27,7 @@ import com.br.cryptoOasys.model.ResponseMessageVO;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
-	ResponseErrorMessage erro = new ResponseErrorMessage();
+	ResponseMessage response = new ResponseMessage();
 	ResponseMessageVO messageVO = new ResponseMessageVO();
 	
 	@Autowired
@@ -34,25 +35,25 @@ public class ApiExceptionHandler {
 
 
 	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<ResponseErrorMessage> handleBadRequestException(BadRequestException badRequestException,
+	public ResponseEntity<ResponseMessage> handleBadRequestException(BadRequestException badRequestException,
 			HttpServletRequest request) {
-		erro.setError(HttpStatus.BAD_REQUEST);
-		erro.setPath(request.getRequestURI());
-		erro.setStatus(HttpStatus.BAD_REQUEST.value());
-		erro.setTimestamp(Instant.now());
-		erro.setMessage(badRequestException.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+		response.setStatusType(HttpStatus.BAD_REQUEST);
+		response.setPath(request.getRequestURI());
+		response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+		response.setTimestamp(Instant.now());
+		response.setMessage(badRequestException.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 	
 	@ExceptionHandler(UserNotLoggedException.class)
-	public ResponseEntity<ResponseErrorMessage> handleAccountNotFoundException(UserNotLoggedException accountNotFoundException,
+	public ResponseEntity<ResponseMessage> handleAccountNotFoundException(UserNotLoggedException accountNotFoundException,
 			HttpServletRequest request) {
-		erro.setError(HttpStatus.BAD_REQUEST);
-		erro.setPath(request.getRequestURI());
-		erro.setStatus(HttpStatus.BAD_REQUEST.value());
-		erro.setTimestamp(Instant.now());
-		erro.setMessage(accountNotFoundException.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+		response.setStatusType(HttpStatus.BAD_REQUEST);
+		response.setPath(request.getRequestURI());
+		response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+		response.setTimestamp(Instant.now());
+		response.setMessage(accountNotFoundException.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
 	
 	@ExceptionHandler(FavoritesDontExistException.class)
@@ -65,11 +66,11 @@ public class ApiExceptionHandler {
 	public ResponseEntity<ResponseErrorMessageNotValid> invalidForm(MethodArgumentNotValidException exception, HttpServletRequest request) {
 		List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
 		ResponseErrorMessageNotValid erro = new ResponseErrorMessageNotValid();
-		erro.setError(HttpStatus.BAD_REQUEST);
+		erro.setStatusType(HttpStatus.BAD_REQUEST);
 		erro.setPath(request.getRequestURI());
-		erro.setStatus(HttpStatus.BAD_REQUEST.value());
+		erro.setStatusCode(HttpStatus.BAD_REQUEST.value());
 		erro.setTimestamp(Instant.now());
-		erro.setMessage("Campos não inseridos corretamente");
+		erro.setMessage("Fields not entered correctly");
 		List<FieldNotValid> fieldsNotValidList = new ArrayList<FieldNotValid>();
 		fieldErrors.forEach(error ->{
 			String field = error.getField();
@@ -79,5 +80,16 @@ public class ApiExceptionHandler {
 		});
 		erro.setFields(fieldsNotValidList);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(ObjectNullException.class)
+	public ResponseEntity<ResponseMessage> handleObjectNullException(ObjectNullException objectNullException,
+			HttpServletRequest request) {
+		response.setStatusType(HttpStatus.ACCEPTED);
+		response.setPath(request.getRequestURI());
+		response.setStatusCode(HttpStatus.ACCEPTED.value());
+		response.setTimestamp(Instant.now());
+		response.setMessage(objectNullException.getMessage());
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
 	}
 }
