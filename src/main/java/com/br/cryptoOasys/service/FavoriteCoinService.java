@@ -4,9 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,16 +22,18 @@ public class FavoriteCoinService {
 
 	@Autowired
 	FavoriteCoinRepository coinFavoriteRepository;
+	
+	@Autowired
+	RedisService redisService;
 
 	@Autowired
 	UserService userService;
 
-	public FavoriteCoinDTO favoriting(HttpServletRequest request, HttpServletResponse response, String coinId,
-			String notes) {
-		userService.verifyIfUserIsLogged(request);
+	public FavoriteCoinDTO favoriting(String coinId, String notes) {
+		userService.verifyIfUserIsLogged();
 		String errorMessage = "Error to favoriting coin. Make sure this coin exist";
 		try {
-			String userIdLogged = userService.getLoggedUser(request);
+			String userIdLogged = redisService.getUserLogged();
 			CoinVO coin = feignRequest.coinById(coinId).getBody();
 			FavoriteCoinDTO coinFavorite = new FavoriteCoinDTO();
 			coinFavorite.setId(coin.getId());
@@ -50,10 +49,10 @@ public class FavoriteCoinService {
 		}
 	}
 
-	public List<FavoriteCoinDTO> findFavoritesByUserId(HttpServletRequest request, HttpServletResponse response) {
-		userService.verifyIfUserIsLogged(request);		
+	public List<FavoriteCoinDTO> findFavoritesByUserId() {
+		userService.verifyIfUserIsLogged();			
 		try {
-			String userIdLogged = userService.getLoggedUser(request);
+			String userIdLogged = redisService.getUserLogged();
 			List<FavoriteCoinDTO> favoriteCoins = coinFavoriteRepository.findByUserId(userIdLogged);			
 			this.verifyFavoriteCoinsIsNull(favoriteCoins);
 			return favoriteCoins;
@@ -64,11 +63,10 @@ public class FavoriteCoinService {
 		}
 	}
 
-	public FavoriteCoinDTO update(HttpServletRequest request, HttpServletResponse response, String coinId,
-			String notes) {
-		userService.verifyIfUserIsLogged(request);		
+	public FavoriteCoinDTO update(String coinId, String notes) {
+		userService.verifyIfUserIsLogged();		
 		try {
-			String userIdLogged = userService.getLoggedUser(request);
+			String userIdLogged = redisService.getUserLogged();
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);
 			this.verifyFavoriteCoinsIsNull(favoriteCoin);
 			favoriteCoin.get().setNotes(notes);
@@ -82,11 +80,11 @@ public class FavoriteCoinService {
 		}
 	}
 
-	public FavoriteCoinDTO delete(HttpServletRequest request, HttpServletResponse response, String coinId)
+	public FavoriteCoinDTO delete(String coinId)
 			throws FavoritesDontExistException {
-		userService.verifyIfUserIsLogged(request);		
+		userService.verifyIfUserIsLogged();		
 		try {
-			String userIdLogged = userService.getLoggedUser(request);
+			String userIdLogged = redisService.getUserLogged();
 			Optional<FavoriteCoinDTO> favoriteCoin = coinFavoriteRepository.findByUserIdAndId(userIdLogged, coinId);
 			this.verifyFavoriteCoinsIsNull(favoriteCoin);
 			coinFavoriteRepository.delete(favoriteCoin.get());

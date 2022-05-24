@@ -14,7 +14,7 @@ import lombok.Data;
 @Table(name="TB_USER")
 @Data
 @Builder
-public class UserDTO {
+public class UserDTO  {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;

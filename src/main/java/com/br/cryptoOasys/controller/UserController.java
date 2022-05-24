@@ -1,7 +1,6 @@
 package com.br.cryptoOasys.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,22 +23,20 @@ public class UserController {
 	private UserService userService;
 	
 	@PostMapping
-	public ResponseEntity<ResponseMessage> register(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody @Valid UserDTO user) {		
-		UserDTO userCreated = userService.register(request, user.getName(), user.getNickName(), user.getPassword());
+	public ResponseEntity<ResponseMessage> register(HttpServletRequest request, @RequestBody @Valid UserDTO user) {		
+		UserDTO userCreated = userService.register(user.getName(), user.getNickName(), user.getPassword());
 		return ResponseEntity.ok(ResponseMessage.OK(userCreated.getName() + " successfully created", request));
 	}
 	
 	@GetMapping("/login")
-	public Object login(HttpServletRequest request, HttpServletResponse response,
-			@RequestBody @Valid UserDTO user) {
-		String userLogged = userService.login(request, response, user.getNickName(), user.getPassword());
+	public Object login(HttpServletRequest request, @RequestBody @Valid UserDTO user) {
+		String userLogged = userService.login(user.getNickName(), user.getPassword());
 		return ResponseEntity.ok(ResponseMessage.OK(userLogged + " successfully logged", request));
 	}
 	
 	@GetMapping("/logout")
-	public Object logout(HttpServletRequest request, HttpServletResponse response) {
-		userService.logout(request, response);
+	public Object logout(HttpServletRequest request) {
+		userService.logout();
 		return ResponseEntity.ok(ResponseMessage.OK("Logout succesful", request));
 	}
 }
