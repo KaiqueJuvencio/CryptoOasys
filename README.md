@@ -51,12 +51,13 @@ docker-compose build --no-cache
 docker-compose up
 ```
 
-Vai rodar dois containers: 
+Vai rodar três containers: 
 
-- Container Postgres database (db) |  localhost:15432
-- Container Java backend  (app) | localhost:8080
+- Container Postgres database (postgres-db) |  localhost:15432
+- Container Redis database (redis-db) |  redis:6379
+- Container Java backend  (java-app) | localhost:8080
 
-## 📊 Database Tables
+## 📊 Postgres Database Tables
 
 
 ### TB_FAVORITE_COIN
@@ -79,6 +80,13 @@ Vai rodar dois containers:
 | name                    | varchar(255) | Nome do usuário        |
 | nick_name               | varchar(255) | Apelido do usuário     |
 | password                | varchar(255) | Senha do usuário       |
+
+## 📊 Redis Database Keys
+
+| Fields                  |  Type        | Description |
+| ----------------------- | :----------: | ----------: |
+| userLoggedName          | String       | Nome do usuário logado |
+| userLoggedNick          | String       | Apelido do usuário logado |
 
 ## ✍️ Author
 
