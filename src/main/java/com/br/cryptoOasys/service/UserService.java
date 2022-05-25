@@ -2,10 +2,6 @@ package com.br.cryptoOasys.service;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +16,10 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	
-	public UserDTO register(HttpServletRequest request, String name, String nickName, String password) {		
+	@Autowired
+	RedisService redisService;
+	
+	public UserDTO register(String name, String nickName, String password) {		
 		String errorMsg= "Error to register user";
 		try {
 			Optional<UserDTO> userExistent = userRepository.findByNickName(nickName);
@@ -40,13 +39,11 @@ public class UserService {
 	}
 	
 	
-	public String login(HttpServletRequest request, HttpServletResponse response,
-			String nickName, String password) {
+	public String login(String nickName, String password) {
 		Optional<UserDTO> user = userRepository.findByNickName(nickName);
-		HttpSession session = request.getSession();
 		if(user.isPresent()) {
 			if(correctPassword(user, password)) {
-				session.setAttribute("userLogged", nickName);
+				redisService.setUserLogged(user.get());		
 				return user.get().getName();
 			}
 			throw new BadRequestException("Incorrect password");
@@ -54,26 +51,18 @@ public class UserService {
 		throw new BadRequestException("User not exist");	
 	}
 	
-	public void logout(HttpServletRequest request, HttpServletResponse response) {
+	public void logout() {
 		try {
-			HttpSession session = request.getSession();
-			session.setAttribute("userLogged", null);	
+			redisService.userLogout();
 		}catch (Exception e) {
-			throw new BadRequestException("Error to logou");
+			throw new BadRequestException("Error to logout");
 		}		
 	}
 	
-	public void verifyIfUserIsLogged(HttpServletRequest request)  {		
-		HttpSession session = request.getSession();		
-		if(session.getAttribute("userLogged") == null) {
+	public void verifyIfUserIsLogged()  {		
+		if(redisService.getUserLogged() == null) {
 			throw new UserNotLoggedException("User not logged");
 		}															
-	}
-	
-	public String getLoggedUser(HttpServletRequest request) {
-		this.verifyIfUserIsLogged(request);
-		HttpSession session = request.getSession();
-		return session.getAttribute("userLogged").toString();
 	}
 	
 	public boolean correctPassword(Optional<UserDTO> user, String password) {

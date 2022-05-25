@@ -28,10 +28,13 @@ public class CoinService {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	RedisService redisService;
 
 	public ResponseEntity<List<CoinVO>> list(HttpServletRequest request, HttpServletResponse response) {
-		userService.verifyIfUserIsLogged(request);
-		String userIdLogged = userService.getLoggedUser(request);
+		userService.verifyIfUserIsLogged();
+		String userIdLogged = redisService.getUserLogged();
 		try {
 			ResponseEntity<List<CoinVO>> coins = feignRequest.listCoins();
 			List<FavoriteCoinDTO> favoriteCoins = coinFavoriteRepository.findByUserId(userIdLogged);
