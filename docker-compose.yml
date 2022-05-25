@@ -4,25 +4,36 @@ version: '3'
 services:
   db:
     image: postgres
-    container_name: db
+    container_name: postgres-db
     environment:
       POSTGRES_PASSWORD: "Postgres2019!"
     ports:
       - "15432:5432"
     volumes:
-      - $HOME/docker/volumes/postgres:/var/lib/postgresql/data                      
+      - $HOME/docker/volumes/postgres:/var/lib/postgresql/data   
+
+  redis-compose:
+    image: redis
+    container_name: redis-db
+    command: redis-server --protected-mode no
+    hostname: redis
+    ports:
+      - "6379:6379"       
       
   app:
     image: 'docker-spring-boot-postgres:latest'
     build:
       context: .
-    container_name: app
+    container_name: java-app
     depends_on:
       - db
+      - redis-compose
     environment:
        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
        SPRING_DATASOURCE_USERNAME: postgres
        SPRING_DATASOURCE_PASSWORD: Postgres2019!
        SPRING_JPA_HIBERNATE_DDL_AUTO: update
     ports:
-      - "8080:8080"     
+      - "8080:8080"
+      
+     
