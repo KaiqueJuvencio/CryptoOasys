@@ -1,7 +1,6 @@
 #  🪙 CryptoOasys 🪙
 
-CryptoOasys é uma plataforma para favoritar, monitorar informações sobre suas cripto‑
-moedas favoritas e fazer notas sobre cada uma.
+CryptoOasys é uma plataforma para favoritar, monitorar informações sobre suas cripto‑moedas favoritas e fazer notas sobre cada uma.
 
 ## Features
 
@@ -12,6 +11,9 @@ moedas favoritas e fazer notas sobre cada uma.
 - Favoritar moeda :heavy_check_mark:
 - Modificar anotação :heavy_check_mark:
 - Remover favorito :heavy_check_mark:
+
+## API Consumida (Paprika API)
+- https://api.coinpaprika.com/
 
 ## Tech Stack
 
@@ -26,10 +28,9 @@ Tecnologias usadas para construir a aplicação
 
 - Java (jdk-11.0.2) | Spring Boot, JPA, Hibernate, JUnit, Swagger, OpenFeign (Spring Cloud), Devtools, Maven (3.8.5), Lombok, Validators
 - Postgres
-- Redis (Cache)
+- Redis (Cache/ Login)
 - Docker
 - Docker Compose
-- Github Features (Issues, Pull Requests)
 
 ### :hot_pepper: Lombok:
 Como instalar o Lombok para sua IDE disponível em: https://projectlombok.org/setup/overview
@@ -38,15 +39,20 @@ Como instalar o Lombok para sua IDE disponível em: https://projectlombok.org/se
 
 Para iniciar a aplicação local, execute os seguintes comandos na raiz do projeto:
 
-1º:
-```bash
-mvn clean install
-```
-2º:
+
+1º - Buildar imagens Docker
 ```bash
 docker-compose build --no-cache
 ```
-3º
+2º - Subir o postgres
+```bash
+docker-compose up db
+```
+3º - Clean install no backend
+```bash
+mvn clean install
+```
+4º - Subir o projeto
 ```bash
 docker-compose up
 ```
@@ -56,6 +62,11 @@ Vai rodar três containers:
 - Container Postgres database (postgres-db) |  localhost:15432
 - Container Redis database (redis-db) |  redis:6379
 - Container Java backend  (java-app) | localhost:8080
+
+## Documentação
+- Swagger disponível em: http://localhost:8080/swagger-ui.html
+- Arquivo Postman disponível na raiz do projeto: cryptoOasys.postman_collection.json 
+- No arquivo do Postman é possível bater na API consumida pelo backend da PAPRIKA API
 
 ## 📊 Postgres Database Tables
 
@@ -88,11 +99,4 @@ Vai rodar três containers:
 | userLoggedName          | String       | Nome do usuário logado |
 | userLoggedNick          | String       | Apelido do usuário logado |
 
-## ✍️ Author
-
- [<img src="https://github.com/KaiqueJuvencio.png" width="130px;"/><br /><sub>**Kaique Juvencio**</sub>](https://github.com/KaiqueJuvencio)<br /> 
- 
- <h2>Reach me out 👇🏼</h2>
-
-[![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/kaiquejuvencio/)](https://www.linkedin.com/in/kaiquejuvencio/) [![Gmail Badge](https://img.shields.io/badge/-kaiquejuvenciocosta@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:kaiquejuvenciocosta@gmail.com)](mailto:kaiquejuvenciocosta@gmail.com)
 
